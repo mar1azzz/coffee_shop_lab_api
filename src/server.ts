@@ -3,6 +3,7 @@ import { sequelize } from "./config/db";
 import dotenv from "dotenv";
 //import cors from "cors";
 import authRoutes from "./routes/authRoutes";
+import productRoutes from "./routes/productRoutes";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/menu", productRoutes);
 
 // Подключение к базе
 sequelize
