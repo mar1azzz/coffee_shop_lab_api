@@ -1,6 +1,6 @@
-import { Table, Column, Model, DataType, ForeignKey } from "sequelize-typescript";
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from "sequelize-typescript";
 import { User } from "./User";
-import { Product } from "./Product";
+import { OrderItem } from "./OrderItem";
 
 export enum OrderStatus {
   PENDING = "PENDING",
@@ -14,13 +14,17 @@ export class Order extends Model {
   id!: number;
 
   @ForeignKey(() => User)
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  userId!: number;
+    @Column({ type: DataType.INTEGER, allowNull: false })
+    userId!: number;
 
-  @ForeignKey(() => Product)
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  productId!: number;
+    @BelongsTo(() => User)
+    user!: User;
+
 
   @Column({ type: DataType.ENUM(OrderStatus.PENDING, OrderStatus.COMPLETED, OrderStatus.CANCELLED), defaultValue: OrderStatus.PENDING })
   status!: OrderStatus;
+
+  @HasMany(() => OrderItem, { onDelete: "CASCADE", hooks: true })
+  items!: OrderItem[];
+
 }

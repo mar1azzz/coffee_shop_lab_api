@@ -13,7 +13,12 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as { id: number; role: string };
-    req.user = decoded;
+    console.log("Decoded user:", decoded);
+    req.user = {
+      id: decoded.id,
+      role: decoded.role,
+    };
+    console.log("Authenticated user authmiddleware:", req.user);
     next();
   } catch (error) {
     return res.status(403).json({ message: "Неверный токен" });
