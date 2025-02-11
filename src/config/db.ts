@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { User } from "../models/User";
 import { Product } from "../models/Product";
 import { Order } from "../models/Order";
+import { Category } from "../models/Category";
 
 dotenv.config();
 
@@ -12,5 +13,5 @@ export const sequelize = new Sequelize({
   password: process.env.DB_PASS,
   host: process.env.DB_HOST,
   dialect: "postgres",
-  models: [User, Product, Order],
+  models: [User, Category, Product, Order],
 });

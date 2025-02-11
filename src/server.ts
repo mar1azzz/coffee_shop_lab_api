@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 //import cors from "cors";
 import authRoutes from "./routes/authRoutes";
 import productRoutes from "./routes/productRoutes";
+import categoryRoutes from './routes/categoryRoutes';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/menu", productRoutes);
+app.use("/api/menu", categoryRoutes);
 
 // Подключение к базе
 sequelize

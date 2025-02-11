@@ -6,10 +6,10 @@ import {User} from "../models/User";
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     console.log("📌 Попытка входа:", req.body);
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
     // Проверяем, существует ли пользователь
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ where: { username } });
     if (!user) {
       console.log("❌ Пользователь не найден");
       res.status(400).json({ error: "User not found" });
@@ -32,7 +32,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     );
 
     console.log("✅ Вход успешен, токен:", token);
-    res.json({ message: "Login successful", token });
+    res.json({ message: "Login successful", username: user.username, token, role: user.role });
   } catch (error) {
     console.error("❌ Ошибка в login:", error);
     res.status(500).json({ error: "Internal server error" });
