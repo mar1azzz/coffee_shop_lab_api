@@ -3,7 +3,8 @@ import  {
     getAllCategories,
     getCategoryById, 
     createCategory, 
-    updateCategory } from "../controllers/categoryController"
+    updateCategory, 
+    deleteCategory} from "../controllers/categoryController"
 import { authenticate, authorize } from "../middleware/authMiddleware";
 
 const router = Router();
@@ -88,7 +89,7 @@ router.get("/categories/:id", getCategoryById as RequestHandler);
  *       403:
  *         description: Недостаточно прав
  */
-router.post("/categories", authenticate as RequestHandler, authorize(["ADMIN"]) as RequestHandler, createCategory);
+router.post("/categories", authenticate as RequestHandler, authorize(["ADMIN"]) as RequestHandler, createCategory as RequestHandler);
 /**
  * @swagger
  * /api/menu/categories/{id}:
@@ -126,6 +127,43 @@ router.post("/categories", authenticate as RequestHandler, authorize(["ADMIN"]) 
  *       404:
  *         description: Категория не найдена
  */
-router.put("/categories/:id", authenticate as RequestHandler, authorize(["ADMIN"]) as RequestHandler, updateCategory);
+router.put("/categories/:id", authenticate as RequestHandler, authorize(["ADMIN"]) as RequestHandler, updateCategory as RequestHandler);
+
+/**
+ * @swagger
+ * /api/menu/product/{id}:
+ *   delete:
+ *     summary: Удалить категорию и её продукты по ID (только для ADMIN)
+ *     tags: [Categories]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID категории
+ *     responses:
+ *       200:
+ *         description: Категория удалёна
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Категория удалёна"
+ *       400:
+ *         description: Неверный ID категории
+ *       401:
+ *         description: Не авторизован
+ *       403:
+ *         description: Доступ запрещен
+ *       404:
+ *         description: Категория не найдена
+ */
+router.delete("/categories/:id", authenticate as RequestHandler, authorize(["ADMIN"]) as RequestHandler, deleteCategory as RequestHandler);
 
 export default router;
