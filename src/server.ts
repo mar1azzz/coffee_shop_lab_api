@@ -1,7 +1,7 @@
 import express from "express";
 import { sequelize } from "./config/db";
 import dotenv from "dotenv";
-//import cors from "cors";
+import cors from "cors";
 import authRoutes from "./routes/authRoutes";
 import productRoutes from "./routes/productRoutes";
 import categoryRoutes from './routes/categoryRoutes';
@@ -14,8 +14,14 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+app.use(cors({ 
+  origin: ["http://localhost:5173"], 
+  methods: ["GET", "POST", "PUT", "DELETE"], 
+  allowedHeaders: ["Content-Type", "Authorization"], 
+  credentials: true 
+}));
+
 app.use(express.json());
-//app.use(cors());
 
 // Routes
 app.use("/api/auth", authRoutes);
