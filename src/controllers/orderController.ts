@@ -38,12 +38,7 @@ export const createOrder = async (req: AuthRequest, res: Response) => {
 
     console.log("User ID from request:", req.user?.id);
 
-    const user_id = parseInt(req.params.id, 10);
-    if (isNaN(user_id)) {
-      return res.status(400).json({ error: "Некорректный ID" });
-    }
-
-    const order = await Order.create({ userId: user_id });
+    const order = await Order.create({ userId: req.user.id });
 
     const orderItems = await Promise.all(
       items.map(async (item: { productId: number; quantity: number }) => {
