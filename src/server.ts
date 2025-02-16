@@ -10,7 +10,7 @@ import { setupSwagger } from "./config/swagger";
 
 dotenv.config();
 
-const app = express();
+export const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
@@ -42,4 +42,6 @@ sequelize
   .then(() => console.log("✅ База данных синхронизирована!"))
   .catch((err: Error) => console.error("❌ Ошибка синхронизации БД:", err.message));
 
-app.listen(PORT, () => console.log(`🚀 Сервер запущен на порту ${PORT}`));
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => console.log(`🚀 Сервер запущен на порту ${PORT}`));
+}

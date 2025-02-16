@@ -42,7 +42,7 @@ export const register = async (req: Request, res: Response) => {
     console.error("❌ Ошибка в register:", error);
     if (error instanceof UniqueConstraintError) {
       return res.status(409).json({
-        error: "User with this email already exists",
+        error: "User with this username already exists",
         details: error.errors.map((e) => e.message),
       });
     }

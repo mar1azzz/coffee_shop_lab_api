@@ -71,7 +71,7 @@ const router = express.Router();
  *       400:
  *         description: Ошибка валидации (например, не все обязательные поля заполнены)
  *       409:
- *         description: Пользователь с таким email уже существует
+ *         description: Пользователь с таким username уже существует
  *       500:
  *         description: Внутренняя ошибка сервера
  */

@@ -7,12 +7,15 @@ import { Order } from "../models/Order";
 import { Category } from "../models/Category";
 
 dotenv.config();
+const isTestEnv = process.env.NODE_ENV === "test";
 
 export const sequelize = new Sequelize({
-  database: process.env.DB_NAME,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  host: process.env.DB_HOST,
-  dialect: "postgres",
+  dialect: isTestEnv ? "sqlite" : "postgres",
+  storage: isTestEnv ? ":memory:" : undefined,
+  database: isTestEnv ? undefined : process.env.DB_NAME,
+  username: isTestEnv ? undefined : process.env.DB_USER,
+  password: isTestEnv ? undefined : process.env.DB_PASS,
+  host: isTestEnv ? undefined : process.env.DB_HOST,
   models: [User, Category, Product, OrderItem, Order],
 });
+
