@@ -60,6 +60,16 @@ describe("Order Routes Integration Tests", () => {
     expect(response.body.order).toHaveProperty("id");
   });
 
+  it("should return 500 if a product does not exist", async () => {
+    const userData = await CreateUser("USER");
+    const res = await request(app)
+    .post("/api/orders")
+    .set("Authorization", `Bearer ${userData.token}`)
+    .send({ items: [{ productId: 999, quantity: 1 }] });
+    expect(res.status).toBe(500);
+    expect(res.body.message).toBe("Продукт с id 999 не найден");
+});
+
   it("should allow admins to update order status", async () => {
     const orderresult = await CreateOrder();
     const adminData = await CreateUser("ADMIN");

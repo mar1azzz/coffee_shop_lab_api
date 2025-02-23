@@ -5,6 +5,7 @@ import { OrderItem } from "../../models/OrderItem";
 import { Product } from "../../models/Product";
 import { User } from "../../models/User";
 import bcrypt from "bcrypt";
+import { Category } from "../../models/Category";
 
 jest.mock("../../models/Order");
 jest.mock("../../models/OrderItem");
@@ -77,6 +78,15 @@ describe("Order Controller", () => {
           .send({ items: [{ productId: "invalid", quantity: -1 }] });
         expect(res.status).toBe(400);
     });
+
+    it("should return 400 if items array is missing", async () => {
+      const res = await request(app)
+        .post("/api/orders")
+        .set("Authorization", `Bearer ${userToken}`)
+        .send({});
+      expect(res.status).toBe(400);
+    });
+
   });
 
   describe("GET /orders", () => {
@@ -91,6 +101,12 @@ describe("Order Controller", () => {
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockOrders);
     });
+
+    it("should return 401 if user is not authenticated", async () => {
+      const res = await request(app).get("/api/orders");
+      expect(res.status).toBe(401);
+    });
+
   });
 
   describe("PUT /orders/:orderId", () => {
@@ -115,6 +131,27 @@ describe("Order Controller", () => {
         expect(res.status).toBe(403);
         expect(res.body.message).toBe("Нет доступа для редактирования");
     });
+
+    it("should return 400 if order ID is invalid", async () => {
+      const res = await request(app)
+        .put("/api/orders/invalid")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ status: "shipped" });
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe("Некорректный ID заказа");
+    });
+
+    it("should return 404 if order does not exist", async () => {
+      (Order.findByPk as jest.Mock).mockResolvedValue(null);
+
+      const res = await request(app)
+        .put("/api/orders/999")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ status: "shipped" });
+      expect(res.status).toBe(404);
+      expect(res.body.message).toBe("Заказ не найден");
+    });
+
   });
 
   describe("DELETE /orders/:orderId", () => {
@@ -137,5 +174,16 @@ describe("Order Controller", () => {
         expect(res.status).toBe(403);
         expect(res.body.message).toBe("Нет доступа для удаления");
     });
+
+    it("should return 404 if order does not exist", async () => {
+      (Order.findByPk as jest.Mock).mockResolvedValue(null);
+
+      const res = await request(app)
+        .delete("/api/orders/999")
+        .set("Authorization", `Bearer ${adminToken}`);
+      expect(res.status).toBe(404);
+      expect(res.body.message).toBe("Заказ не найден");
+    });
+
   });
 });
