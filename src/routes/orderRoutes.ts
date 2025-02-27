@@ -50,7 +50,7 @@ const router = Router();
 
 /**
  * @swagger
- * /orders:
+ * api/orders:
  *   post:
  *     summary: Создать заказ
  *     tags: [Orders]
@@ -93,7 +93,7 @@ router.post("/", authenticate as RequestHandler, createOrder as RequestHandler);
 
 /**
  * @swagger
- * /orders:
+ * api/orders:
  *   get:
  *     summary: Получить список заказов
  *     tags: [Orders]
@@ -115,7 +115,7 @@ router.get("/", authenticate as RequestHandler, getOrders as RequestHandler);
 
 /**
  * @swagger
- * /orders/{orderId}:
+ * api/orders/{orderId}:
  *   put:
  *     summary: Обновить статус заказа (только администратор)
  *     tags: [Orders]
@@ -155,7 +155,7 @@ router.put("/:orderId", authenticate as RequestHandler, updateOrder as RequestHa
 
 /**
  * @swagger
- * /orders/{orderId}:
+ * api/orders/{orderId}:
  *   delete:
  *     summary: Удалить заказ (только администратор)
  *     tags: [Orders]
